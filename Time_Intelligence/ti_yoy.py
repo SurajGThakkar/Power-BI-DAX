@@ -1,0 +1,6 @@
+YoY = 
+SELECTEDMEASURE() - 
+CALCULATE(
+    SELECTEDMEASURE(),
+    DATEADD(DimDate[Date], -1, YEAR)
+    )
