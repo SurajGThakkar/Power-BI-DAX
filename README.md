@@ -12,7 +12,6 @@ The **Power-BI** repository is designed to help developers build effective and s
 - **Regular Updates**: New DAX functions and enhancements are regularly added.
 - **Customizable Examples**: Easily modify table names and columns using the provided examples.
 
-```markdown
 ## Detailed Breakdown of Measures
 
 ### `[cf_transparent]`
