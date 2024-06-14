@@ -16,13 +16,13 @@ The **Power-BI** repository is designed to help developers build effective and s
 
 ### `[cf_transparent]`
 ```DAX
-MEASURE '[01] Measures'[cf_transparent] = "#FFFFFF00"
+[cf_transparent] = "#FFFFFF00"
 ```
 - Returns the color code for transparent white.
 
 ### `[Count Active Filters]`
 ```DAX
-MEASURE '[01] Measures'[Count Active Filters] = 
+[Count Active Filters] = 
 VAR geography = IF(ISFILTERED(Churn_Modelling[Geography]), 1, 0)
 VAR gender = IF(ISFILTERED(Churn_Modelling[gender]), 1, 0)
 VAR age_group = IF(ISFILTERED(Churn_Modelling[age group]), 1, 0)
@@ -40,21 +40,21 @@ RETURN filter_count & ""
 
 ### `[Count Active Filters Button Color]`
 ```DAX
-MEASURE '[01] Measures'[Count Active Filters Button Color] = 
+[Count Active Filters Button Color] = 
 IF([Count Active Filters] = "0", "#CDC4BA30", "#CDC4BA")
 ```
 - Sets the button color based on the presence of active filters.
 
 ### `[Count Active Filters Counter Color]`
 ```DAX
-MEASURE '[01] Measures'[Count Active Filters Counter Color] = 
+[Count Active Filters Counter Color] = 
 IF([Count Active Filters] = "0", "#CDC4BA30", "#3D3D3D")
 ```
 - Sets the counter color based on the presence of active filters.
 
 ### `[Count Active Filters Tooltip]`
 ```DAX
-MEASURE '[01] Measures'[Count Active Filters Tooltip] = 
+[Count Active Filters Tooltip] = 
 VAR geography = IF(ISFILTERED(Churn_Modelling[Geography]), "Geography", BLANK())
 VAR gender = IF(ISFILTERED(Churn_Modelling[gender]), "Gender", BLANK())
 VAR age_group = IF(ISFILTERED(Churn_Modelling[age group]), "Age Group", BLANK())
@@ -76,7 +76,7 @@ RETURN "Active Filters: " & IF(filter_label_show <> BLANK(), filter_label_show, 
 
 ### `[Active Slicer Labels]`
 ```DAX
-MEASURE '[01] Measures'[Active Slicer Labels] = 
+[Active Slicer Labels] = 
 VAR slicer_filtered = [Slicer is Filtered]
 
 VAR slicer_label = SWITCH(
@@ -99,7 +99,7 @@ RETURN show_slicer_label
 
 ### Label Measures (e.g., `[Active Members Label]`, `[Age Group Label]`, etc.)
 ```DAX
-MEASURE '[01] Measures'[Active Members Label] = 
+[Active Members Label] = 
 VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('Churn_Modelling'[IsActiveMember Label])
 VAR __MAX_VALUES_TO_SHOW = 2
 
@@ -133,7 +133,7 @@ RETURN IF(
 
 ### `[Salary Range Label (Complex)]`
 ```DAX
-MEASURE '[01] Measures'[Salary Range Label (Complex)] = 
+[Salary Range Label (Complex)] = 
 VAR _max_value = MAX(Churn_Modelling[Salary Range Sort])
 VAR _min_value = MIN(Churn_Modelling[Salary Range Sort])
 
@@ -165,7 +165,7 @@ RETURN _label
 
 ### `[Salary Range Label (Continuous)]`
 ```DAX
-MEASURE '[01] Measures'[Salary Range Label (Continuous)] = 
+[Salary Range Label (Continuous)] = 
 VAR _bottom_limit = IF(NOT MIN(Churn_Modelling[Salary Range Sort]) IN {1, 6},
     CALCULATE(VALUES(Churn_Modelling[Salary Range]),
         Churn_Modelling[Salary Range Sort] = MIN(Churn_Modelling[Salary Range Sort])
@@ -193,7 +193,7 @@ RETURN _label
 
 ### `[Churn]`
 ```DAX
-MEASURE '[01] Measures'[Churn] = 
+[Churn] = 
 VAR exited_customers = CALCULATE(COUNTROWS(Churn_Modelling), Churn_Modelling[Exited] = 1)
 VAR all_customers = COUNTROWS(Churn_Modelling)
 
@@ -203,15 +203,15 @@ RETURN DIVIDE(exited_customers, all_customers)
 
 ### `[Tooltip Cover Background]` and `[Tooltip Cover Text]`
 ```DAX
-MEASURE '[01] Measures'[Tooltip Cover Background] = IF([Count Active Filters] = "0", "#3D3D3D", "#3D3D3D00")
+[Tooltip Cover Background] = IF([Count Active Filters] = "0", "#3D3D3D", "#3D3D3D00")
 
-MEASURE '[01] Measures'[Tooltip Cover Text] = IF([Count Active Filters] = "0", "No Active Filters")
+[Tooltip Cover Text] = IF([Count Active Filters] = "0", "No Active Filters")
 ```
 - Controls the background color and text for a tooltip based on whether there are active filters.
 
 ### `[Slicer is Filtered]`
 ```DAX
-MEASURE '[01] Measures'[Slicer is Filtered] = 
+[Slicer is Filtered] = 
 SWITCH (
     TRUE,
     ISFILTERED(Churn_Modelling[Geography])
@@ -235,6 +235,43 @@ SWITCH (
 )
 ```
 - Checks if specific columns are filtered and returns `1` if true, otherwise `0`.
+
+### `[Top Prod]`
+```DAX
+[Top Prod] = 
+VAR TopTable = 
+    TOPN(
+        2,
+        FILTER(Products, [Total Sales]),
+        [Total Sales]
+    )
+
+VAR Concat = 
+    CONCATENATEX(
+        TopTable,
+        Products[Product] & " | " & FORMAT([Total Sales], "$#,##0"),
+        UNICHAR(10),
+        [Total Sales],
+        DESC
+    )
+    & UNICHAR(10) & "-----" & UNICHAR(10) &
+    "Total " & FORMAT(
+        CALCULATE(
+            [Total Sales],
+            TopTable
+        ),
+        "$#,##0"
+    )
+
+RETURN
+Concat
+```
+- **TopTable**: This variable uses the `TOPN` function to create a table with the top 2 products based on `Total Sales`.
+- **Concat**: This variable concatenates the top products and their total sales into a single string, separated by a new line (using `UNICHAR(10)`). It formats the sales figures as currency and includes a total sum of sales for the top products at the end.
+- **Return**: The measure returns the concatenated string, providing a summary of the top products and their sales figures.
+
+Use this measure to display the top 2 products along with their sales figures in your Power BI report.
+```
 
 ## Contributing
 If you have any suggestions or improvements, please feel free to submit a pull request or raise an issue. Contributions are welcome!
