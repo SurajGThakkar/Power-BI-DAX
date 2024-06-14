@@ -271,15 +271,12 @@ Concat
 - **Return**: The measure returns the concatenated string, providing a summary of the top products and their sales figures.
 
 Use this measure to display the top 2 products along with their sales figures in your Power BI report.
-```
 
-## Contributing
+### Contributing
 If you have any suggestions or improvements, please feel free to submit a pull request or raise an issue. Contributions are welcome!
 
-## License
+### License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ---
-
 Feel free to explore and utilize these measures to enhance your Power BI reports. For any questions or contributions, please raise an issue or submit a pull request.
-```
+
