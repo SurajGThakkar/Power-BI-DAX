@@ -1,10 +1,32 @@
-### 1. Create a New Table: Bin Start
+### 1. Create Tables
+
+#### Bin Start
 This table generates a series from 0 to 1000 with a step of 25.
 ```DAX
 Bin Start = GENERATESERIES(0, 1000, 25)
 ```
 
-### 2. Measure: Bins Filter
+#### BinSize
+This table generates a series for bin sizes from 25 to 100 with a step of 25.
+```DAX
+BinSize = GENERATESERIES(25, 100, 25)
+```
+
+### 2. Create Measures
+
+#### BinSize Value
+This measure selects the bin size value or defaults to 50 if none is selected.
+```DAX
+BinSize Value = SELECTEDVALUE('BinSize'[BinSize], 50)
+```
+
+#### Nr of Sales Orders
+This measure counts the number of sales orders.
+```DAX
+Nr of Sales Orders = COUNTROWS(fctSales)
+```
+
+#### Bins Filter
 This measure filters the bins based on the selected bin size.
 ```DAX
 Bins Filter =
@@ -18,7 +40,7 @@ RETURN
     BinFilter
 ```
 
-### 3. Measure: Custom Label
+#### Custom Label
 This measure creates custom labels for the bins.
 ```DAX
 Custom Label =
@@ -28,7 +50,7 @@ RETURN
     _BinSize_Min & "-" & _BinSize_Max
 ```
 
-### 4. Measure: Nr of Products
+#### Nr of Products
 This measure calculates the number of products within each bin range.
 ```DAX
 Nr of Products =
@@ -45,22 +67,4 @@ VAR _SalesNr =
     )
 RETURN
     _SalesNr
-```
-
-### 5. New Table: BinSize
-This table generates a series for bin sizes from 25 to 100 with a step of 25.
-```DAX
-BinSize = GENERATESERIES(25, 100, 25)
-```
-
-### 6. Measure: BinSize Value
-This measure selects the bin size value or defaults to 50 if none is selected.
-```DAX
-BinSize Value = SELECTEDVALUE('BinSize'[BinSize], 50)
-```
-
-### 7. Measure: Nr of Sales Orders
-This measure counts the number of sales orders.
-```DAX
-Nr of Sales Orders = COUNTROWS(fctSales)
 ```
