@@ -1,18 +1,28 @@
-### 1. Create Tables
+### 1. Create Table
 
 #### Bin Start
 This table generates a series from 0 to 1000 with a step of 25.
 ```DAX
 Bin Start = GENERATESERIES(0, 1000, 25)
 ```
+### 2. Create Parameter 
 
 #### BinSize
-This table generates a series for bin sizes from 25 to 100 with a step of 25.
+Create a parameter named BinSize with the following values:
+- What will your variable adjust? : Numeric range
+- Name : BinSize
+- Data type : WholeNumber
+- min : 25
+- max : 100
+- increment : 25
+
+**The above step should automatically create a Table called BinSize with the following column:**
+
 ```DAX
 BinSize = GENERATESERIES(25, 100, 25)
 ```
 
-### 2. Create Measures
+### 3. Create Measures
 
 #### BinSize Value
 This measure selects the bin size value or defaults to 50 if none is selected.
