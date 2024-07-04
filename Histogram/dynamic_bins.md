@@ -37,7 +37,9 @@ Nr of Sales Orders = COUNTROWS(fctSales)
 ```
 
 #### Bins Filter
-This measure filters the bins based on the selected bin size.
+This measure filters the bins based on the selected bin size. 
+**(It needs to be added to the filter pane of the histogram visual: *is equal to 1*)**
+
 ```DAX
 Bins Filter =
 VAR _BinSize = BinSize[BinSize Value]
